@@ -40,7 +40,9 @@ def get_images_and_labels(path):
     return images, labels
 
 # Path to the Yale Dataset
-path = './yalefaces'
+# path = './yalefaces'
+path = 'yalefaces'
+
 # Call the get_images_and_labels function and get the face images and the 
 # corresponding labels
 images, labels = get_images_and_labels(path)

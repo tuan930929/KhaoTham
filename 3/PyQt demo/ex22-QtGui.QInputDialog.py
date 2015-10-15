@@ -29,8 +29,11 @@ class Example(QtGui.QWidget):
         self.btn.move(20, 20)
         self.btn.clicked.connect(self.showDialog)
         
-        self.le = QtGui.QLineEdit(self)
-        self.le.move(130, 22)
+        # self.le = QtGui.QLineEdit(self)
+        # self.le.move(130, 22)
+
+        self.lb = QtGui.QLabel('                             ',self)
+        self.lb.move(130, 22)
         
         self.setGeometry(300, 300, 290, 150)
         self.setWindowTitle('Input dialog')
@@ -42,7 +45,7 @@ class Example(QtGui.QWidget):
             'Enter your name:')
         
         if ok:
-            self.le.setText(str(text))
+            self.lb.setText(str(text))
         
 def main():
     
