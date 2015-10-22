@@ -16,6 +16,10 @@ def get_images_and_labels(path):
     # Append all the absolute image paths in a list image_paths
     # We will not read the image with the .sad extension in the training set
     # Rather, we will use them to test our accuracy of the training
+
+    #TuanND
+    #image_paths is array of image paths, with os.listdir(path) return a list of image paths
+    #os.path.join(path,f) is join path with each element of array f 
     image_paths = [os.path.join(path, f) for f in os.listdir(path) if not f.endswith('.sad')]
     # images will contains face images
     images = []
@@ -27,21 +31,30 @@ def get_images_and_labels(path):
         # Convert the image format into numpy array
         image = np.array(image_pil, 'uint8')
         # Get the label of the image
+
         nbr = int(os.path.split(image_path)[1].split(".")[0].replace("subject", ""))
+
+        # nbr = os.path.split(image_path)[1].split(".")[0]
+
         # Detect the face in the image
         faces = faceCascade.detectMultiScale(image)
         # If face is detected, append the face to images and the label to labels
         for (x, y, w, h) in faces:
             images.append(image[y: y + h, x: x + w])
             labels.append(nbr)
-            cv2.imshow("Adding faces to traning set...", image[y: y + h, x: x + w])
+            cv2.imshow("Adding faces to training set...", image[y: y + h, x: x + w])
             cv2.waitKey(50)
     # return the images list and labels list
+    print("labels")
+    print(labels)
+    # print("images")
+    # print(images)
     return images, labels
 
 # Path to the Yale Dataset
 # path = './yalefaces'
-path = 'yalefaces'
+# path = 'yalefaces'
+path = 'testfaces'
 
 # Call the get_images_and_labels function and get the face images and the 
 # corresponding labels
