@@ -33,6 +33,25 @@ def get_images_and_labels(path):
         # Get the label of the image
 
         nbr = int(os.path.split(image_path)[1].split(".")[0].replace("subject", ""))
+        # print("nbr")
+        # print(nbr)
+
+        # #return a array image paths, ex: ('testfaces', 'subject02.wink')
+        # print("os.path.split(image_path)")
+        # print(os.path.split(image_path))
+
+        # #select image paths 2, ex: subject02.wink
+        # print("os.path.split(image_path)[1]")
+        # print(os.path.split(image_path)[1])
+
+        # #return a array image paths, ex: ['subject02', 'wink']
+        # print("os.path.split(image_path)[1].split")
+        # print(os.path.split(image_path)[1].split("."))
+
+        # #select image paths 1, ex: subject02
+        # print("os.path.split(image_path)[1].split[0]")
+        # print(os.path.split(image_path)[1].split(".")[0])
+
 
         # nbr = os.path.split(image_path)[1].split(".")[0]
 
@@ -47,8 +66,8 @@ def get_images_and_labels(path):
     # return the images list and labels list
     print("labels")
     print(labels)
-    # print("images")
-    # print(images)
+    print("images")
+    print(images)
     return images, labels
 
 # Path to the Yale Dataset
@@ -73,9 +92,32 @@ for image_path in image_paths:
     for (x, y, w, h) in faces:
         nbr_predicted, conf = recognizer.predict(predict_image[y: y + h, x: x + w])
         nbr_actual = int(os.path.split(image_path)[1].split(".")[0].replace("subject", ""))
+
+        # #return a array image paths, ex: ('testfaces', 'subject02.wink')
+        # print("os.path.split(image_path)")
+        # print(os.path.split(image_path))
+
+        # #select image paths 2, ex: subject02.wink
+        # print("os.path.split(image_path)[1]")
+        # print(os.path.split(image_path)[1])
+
+        # #return a array image paths, ex: ['subject02', 'wink']
+        # print("os.path.split(image_path)[1].split")
+        # print(os.path.split(image_path)[1].split("."))
+
+        # #select image paths 1, ex: subject02
+        # print("os.path.split(image_path)[1].split[0]")
+        # print(os.path.split(image_path)[1].split(".")[0])
+
+        # print("nbr_actual")
+        # print(nbr_actual)
         if nbr_actual == nbr_predicted:
             print "{} is Correctly Recognized with confidence {}".format(nbr_actual, conf)
         else:
             print "{} is Incorrect Recognized as {}".format(nbr_actual, nbr_predicted)
+
+        
+
+
         cv2.imshow("Recognizing Face", predict_image[y: y + h, x: x + w])
         cv2.waitKey(1000)

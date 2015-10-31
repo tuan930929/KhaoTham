@@ -12,6 +12,9 @@ class Capture():
         self.faceCascade = cv2.CascadeClassifier(self.cascPath)
         self.recognizer = cv2.createLBPHFaceRecognizer()
         self.c = cv2.VideoCapture(0)
+        self.images = []
+        self.labels = []
+        self.labels_name = []
 
     def start_capture(self):
         print "pressed start"
@@ -74,14 +77,19 @@ class Capture():
 
     def training_face(self):
         print "pressed Training Face"
-        images, labels = self.get_images_and_labels()
-        self.recognizer.train(images, np.array(labels))
+        self.images, self.labels, self.labels_name = self.get_images_and_labels()
+        self.recognizer.train(self.images, np.array(self.labels))
+        print("self.images")
+        print(self.images)
+        print("self.labels")
+        print(self.labels)
         print("training face success!")
 
     def recognize_face(self):
         print "pressed Recognize Face"
         self.capturing = True
         cap = self.c
+
         while(self.capturing):
             #ret: true - false, frame: pixel array
             ret, frame = cap.read()
@@ -91,6 +99,11 @@ class Capture():
             # print(frame)
 
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+            # predict_image_pil = gray.convert('L')
+            # predict_image = np.array(predict_image_pil, 'uint8')
+
+            # faces = faceCascade.detectMultiScale(predict_image)
 
             faces = self.faceCascade.detectMultiScale(
                 gray,
@@ -103,17 +116,30 @@ class Capture():
 
             # Draw a rectangle around the faces
             for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 
-                nbr_predicted, conf = self.recognizer.predict(frame[y: y + h, x: x + w])
-                nbr_actual = int(os.path.split(image_path)[1].split(".")[0])
-                if nbr_actual == nbr_predicted:
-                    print "{} is Correctly Recognized with confidence {}".format(nbr_actual, conf)
-                else:
-                    print "{} is Incorrect Recognized as {}".format(nbr_actual, nbr_predicted)
+                nbr_predicted, conf = self.recognizer.predict(gray[y: y + h, x: x + w])
+                # nbr_actual = int(os.path.split(image_path)[1].split(".")[0])
+
+
+                # if nbr_actual == nbr_predicted:
+                #     print "{} is Correctly Recognized with confidence {}".format(nbr_actual, conf)
+                # else:
+                #     print "{} is Incorrect Recognized as {}".format(nbr_actual, nbr_predicted)
+
+                for x in range(0, len(self.labels)):
+                    if(self.labels[x] == nbr_predicted):
+                        print "labels_name is: {} is Correctly Recognized with confidence {}".format(self.labels_name[x], conf)
+                        print(self.labels_name[x])
+                        return self.labels_name[x]
+                    # else:
+                    #     print "The face is Incorrect Recognized as {}".format(nbr_predicted)
+                # print("Face is not in dataset")
+                        
+
 
             # Display the resulting frame
-            cv2.imshow('Video', frame)
+            # cv2.imshow('Video', frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -143,6 +169,7 @@ class Capture():
         images = []
         # labels will contains the label that is assigned to the image
         labels = []
+        #labels_name will contains the name of label
         labels_name = []
         for image_path in image_paths:
             # Read the image and convert to grayscale
@@ -166,7 +193,7 @@ class Capture():
         print(labels)
         print("labels_name")
         print(labels_name)
-        return images, labels
+        return images, labels, labels_name
 
 class Window(QtGui.QWidget):
     def __init__(self):
